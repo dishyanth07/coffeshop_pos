@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>POS Debug - Full Diagnostics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #f9fafb;
+        }
+
+        h1 {
+            color: #1f2937;
+        }
+
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 12px 24px;
+            margin: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        button:active {
+            background: #1d4ed8;
+        }
+
+        pre {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            border-left: 4px solid #6b7280;
+        }
+
+        .success {
+            border-left-color: #10b981 !important;
+            background: #ecfdf5;
+        }
+
+        .error {
+            border-left-color: #ef4444 !important;
+            background: #fef2f2;
+        }
+
+        .info {
+            border-left-color: #3b82f6 !important;
+            background: #eff6ff;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status.pass {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status.fail {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Coffee Shop POS - Full Diagnostics</h1>
+    <p>This page tests all aspects of backend connectivity to help diagnose the "Network Error" issue.</p>
+
+    <div class="test-section">
+        <h2>Test 1: Basic Connectivity <span id="status1" class="status"></span></h2>
+        <button onclick="testRoot()">Run Test 1</button>
+        <pre id="result1" class="info">Click the button to test if backend is reachable...</pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: CORS Preflight <span id="status2" class="status"></span></h2>
+        <button onclick="testCORS()">Run Test 2</button>
+        <pre id="result2" class="info">Click the button to test CORS configuration...</pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Login API (Form Data) <span id="status3" class="status"></span></h2>
+        <button onclick="testLoginFormData()">Run Test 3</button>
+        <pre id="result3" class="info">Click the button to test login with URLSearchParams...</pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Login API (JSON) <span id="status4" class="status"></span></h2>
+        <button onclick="testLoginJSON()">Run Test 4</button>
+        <pre id="result4" class="info">Click the button to test login with JSON payload...</pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 5: Axios Simulation <span id="status5" class="status"></span></h2>
+        <button onclick="testAxiosStyle()">Run Test 5</button>
+        <pre id="result5" class="info">Click the button to simulate how React app calls the API...</pre>
+    </div>
+
+    <button onclick="runAllTests()" style="background: #059669; font-size: 16px; padding: 15px 30px;">▶️ Run All
+        Tests</button>
+
+    <script>
+        async function testRoot() {
+            const result = document.getElementById('result1');
+            const status = document.getElementById('status1');
+            result.textContent = 'Testing GET http://localhost:8000/ ...';
+
+            try {
+                const response = await fetch('http://localhost:8000/');
+                const data = await response.json();
+                result.className = 'success';
+                status.className = 'status pass';
+                status.textContent = 'PASS';
+                result.textContent = `✅ Backend is reachable!\nStatus: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                result.className = 'error';
+                status.className = 'status fail';
+                status.textContent = 'FAIL';
+                result.textContent = `❌ Cannot reach backend!\nError: ${error.message}\n\nThis means:\n- Backend is not running, OR\n- Backend is not on port 8000, OR\n- There's a network/firewall issue`;
+            }
+        }
+
+        async function testCORS() {
+            const result = document.getElementById('result2');
+            const status = document.getElementById('status2');
+            result.textContent = 'Testing CORS preflight...';
+
+            try {
+                const response = await fetch('http://localhost:8000/auth/token', {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'content-type'
+                    }
+                });
+
+                const allowOrigin = response.headers.get('Access-Control-Allow-Origin');
+                const allowMethods = response.headers.get('Access-Control-Allow-Methods');
+
+                if (allowOrigin) {
+                    result.className = 'success';
+                    status.className = 'status pass';
+                    status.textContent = 'PASS';
+                    result.textContent = `✅ CORS is configured!\nAllow-Origin: ${allowOrigin}\nAllow-Methods: ${allowMethods}\nStatus: ${response.status}`;
+                } else {
+                    result.className = 'error';
+                    status.className = 'status fail';
+                    status.textContent = 'FAIL';
+                    result.textContent = `❌ CORS headers missing!\nStatus: ${response.status}\n\nBackend needs to allow origin: ${window.location.origin}`;
+                }
+            } catch (error) {
+                result.className = 'error';
+                status.className = 'status fail';
+                status.textContent = 'FAIL';
+                result.textContent = `❌ CORS preflight failed!\nError: ${error.message}`;
+            }
+        }
+
+        async function testLoginFormData() {
+            const result = document.getElementById('result3');
+            const status = document.getElementById('status3');
+            result.textContent = 'Testing login with URLSearchParams...';
+
+            try {
+                const formData = new URLSearchParams();
+                formData.append('username', 'admin');
+                formData.append('password', 'admin123');
+
+                const response = await fetch('http://localhost:8000/auth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    result.className = 'error';
+                    status.className = 'status fail';
+                    status.textContent = 'FAIL';
+                    result.textContent = `❌ Login rejected!\nStatus: ${response.status}\nError: ${JSON.stringify(errorData, null, 2)}`;
+                    return;
+                }
+
+                const data = await response.json();
+                result.className = 'success';
+                status.className = 'status pass';
+                status.textContent = 'PASS';
+                result.textContent = `✅ Login successful!\nStatus: ${response.status}\nToken: ${data.access_token.substring(0, 60)}...\n\nThis is the CORRECT format!`;
+            } catch (error) {
+                result.className = 'error';
+                status.className = 'status fail';
+                status.textContent = 'FAIL';
+                result.textContent = `❌ Request failed!\nError: ${error.message}\n\nThis is the SAME error your React app is seeing!`;
+            }
+        }
+
+        async function testLoginJSON() {
+            const result = document.getElementById('result4');
+            const status = document.getElementById('status4');
+            result.textContent = 'Testing login with JSON payload...';
+
+            try {
+                const response = await fetch('http://localhost:8000/auth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username: 'admin', password: 'admin123' })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    result.className = 'error';
+                    status.className = 'status fail';
+                    status.textContent = 'FAIL';
+                    result.textContent = `❌ JSON format not supported!\nStatus: ${response.status}\nError: ${JSON.stringify(data, null, 2)}\n\nFastAPI OAuth2PasswordRequestForm requires x-www-form-urlencoded, not JSON.`;
+                } else {
+                    result.className = 'success';
+                    status.className = 'status pass';
+                    status.textContent = 'PASS';
+                    result.textContent = `✅ Unexpected success with JSON!\nToken: ${data.access_token}`;
+                }
+            } catch (error) {
+                result.className = 'error';
+                status.className = 'status fail';
+                status.textContent = 'FAIL';
+                result.textContent = `❌ Request failed!\nError: ${error.message}`;
+            }
+        }
+
+        async function testAxiosStyle() {
+            const result = document.getElementById('result5');
+            const status = document.getElementById('status5');
+            result.textContent = 'Simulating React app axios call...';
+
+            try {
+                // Simulate exactly what the React app does
+                const formData = new URLSearchParams();
+                formData.append('username', 'admin');
+                formData.append('password', 'admin123');
+
+                const config = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData
+                };
+
+                console.log('Request config:', config);
+                const response = await fetch('http://localhost:8000/auth/token', config);
+                console.log('Response:', response);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    result.className = 'error';
+                    status.className = 'status fail';
+                    status.textContent = 'FAIL';
+                    result.textContent = `❌ Axios-style call failed!\nStatus: ${response.status}\nError: ${JSON.stringify(errorData, null, 2)}`;
+                    return;
+                }
+
+                const data = await response.json();
+                result.className = 'success';
+                status.className = 'status pass';
+                status.textContent = 'PASS';
+                result.textContent = `✅ Axios-style call succeeded!\nStatus: ${response.status}\nToken: ${data.access_token.substring(0, 60)}...\n\nIf this works but React app doesn't, the issue is in the React code or axios configuration.`;
+            } catch (error) {
+                result.className = 'error';
+                status.className = 'status fail';
+                status.textContent = 'FAIL';
+                result.textContent = `❌ Axios-style call failed!\nError: ${error.message}\nStack: ${error.stack}`;
+            }
+        }
+
+        async function runAllTests() {
+            await testRoot();
+            await new Promise(r => setTimeout(r, 500));
+            await testCORS();
+            await new Promise(r => setTimeout(r, 500));
+            await testLoginFormData();
+            await new Promise(r => setTimeout(r, 500));
+            await testLoginJSON();
+            await new Promise(r => setTimeout(r, 500));
+            await testAxiosStyle();
+        }
+    </script>
+</body>
+
+</html>

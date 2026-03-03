@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Backend Test - Coffee Shop POS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        pre {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .success {
+            color: #10b981;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧪 Backend Connection Test</h1>
+    <p>This page tests if your backend API is accessible.</p>
+
+    <button onclick="testLogin()">🔐 Test Login API</button>
+    <button onclick="testRoot()">🏠 Test Root Endpoint</button>
+
+    <h2>Results:</h2>
+    <pre id="result">Click a button above to test...</pre>
+
+    <script>
+        async function testRoot() {
+            const result = document.getElementById('result');
+            result.textContent = 'Testing root endpoint...';
+
+            try {
+                const response = await fetch('http://localhost:8000/');
+                const data = await response.json();
+                result.className = 'success';
+                result.textContent = `✅ SUCCESS!\nStatus: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                result.className = 'error';
+                result.textContent = `❌ ERROR!\nMessage: ${error.message}\n\nThis means the backend server is NOT running or not accessible.`;
+            }
+        }
+
+        async function testLogin() {
+            const result = document.getElementById('result');
+            result.textContent = 'Testing login endpoint...';
+
+            try {
+                const formData = new URLSearchParams();
+                formData.append('username', 'admin');
+                formData.append('password', 'admin123');
+
+                const response = await fetch('http://localhost:8000/auth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    result.className = 'error';
+                    result.textContent = `❌ LOGIN FAILED!\nStatus: ${response.status}\nError: ${JSON.stringify(errorData, null, 2)}`;
+                    return;
+                }
+
+                const data = await response.json();
+                result.className = 'success';
+                result.textContent = `✅ LOGIN SUCCESS!\nStatus: ${response.status}\nToken received: ${data.access_token.substring(0, 50)}...\n\nFull Response:\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                result.className = 'error';
+                result.textContent = `❌ NETWORK ERROR!\nMessage: ${error.message}\n\nPossible causes:\n1. Backend server is not running\n2. Backend is not on port 8000\n3. CORS is blocking the request\n\nCheck that backend is running with:\ncd backend\nvenv\\Scripts\\python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload`;
+            }
+        }
+    </script>
+</body>
+
+</html>

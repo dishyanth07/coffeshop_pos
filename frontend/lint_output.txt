@@ -1,0 +1,213 @@
+﻿
+> frontend@0.0.0 lint
+> eslint .
+
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\components\AssistantChat.jsx
+  28:8  warning  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\components\CrisisDashboard.jsx
+  42:18  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\components\RecoveryDashboard.jsx
+  33:8  warning  React Hook useEffect has a missing dependency: 'fetchAllData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\components\Sidebar.jsx
+  38:13  error  Error: Cannot access variable before it is declared
+
+`checkHealth` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  36 |     useEffect(() => {
+  37 |         if (['owner', 'admin'].includes(user?.role)) {
+> 38 |             checkHealth();
+     |             ^^^^^^^^^^^ `checkHealth` accessed before it is declared
+  39 |             const interval = setInterval(checkHealth, 30000); // Check every 30s
+  40 |             return () => clearInterval(interval);
+  41 |         }
+
+  42 |     }, [user]);
+  43 |
+> 44 |     const checkHealth = async () => {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 45 |         try {
+     | ^^^^^^^^^^^^^
+> 46 |             const res = await api.get('/assistant/crisis-status');
+     | ^^^^^^^^^^^^^
+> 47 |             setIsCrisis(res.data.status === 'CRISIS');
+     | ^^^^^^^^^^^^^
+> 48 |         } catch (error) {
+     | ^^^^^^^^^^^^^
+> 49 |             console.error('Sidebar health check failed');
+     | ^^^^^^^^^^^^^
+> 50 |         }
+     | ^^^^^^^^^^^^^
+> 51 |     };
+     | ^^^^^^^ `checkHealth` is declared here
+  52 |
+  53 |     const menuItems = [
+  54 |         { path: '/dashboard', icon: PieChart, title: 'Central Dashboard', roles: ['owner', 'admin'] },  react-hooks/immutability
+  48:18  error  'error' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\context\AuthContext.jsx
+   6:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react-refresh/only-export-components
+  17:17  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  15 |             try {
+  16 |                 const payload = JSON.parse(atob(token.split('.')[1]));
+> 17 |                 setUser({
+     |                 ^^^^^^^ Avoid calling setState() directly within an effect
+  18 |                     id: payload.id,
+  19 |                     username: payload.sub,
+  20 |                     role: payload.role,  react-hooks/set-state-in-effect
+  24:22  error  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\context\ChatContext.jsx
+  5:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\BranchManagement.jsx
+  23:18  error  'error' is defined but never used  no-unused-vars
+  58:18  error  'error' is defined but never used  no-unused-vars
+  85:22  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\CentralDashboard.jsx
+  79:18  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\ChangePassword.jsx
+  12:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  35:18  error  'error' is defined but never used                                                         no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\CustomerHistory.jsx
+  19:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  29:18  error  'error' is defined but never used                                                         no-unused-vars
+  45:18  error  'error' is defined but never used                                                         no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\EndShift.jsx
+  21:19  error  'res' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  24:18  error  'error' is defined but never used                                                    no-unused-vars
+  41:18  error  'error' is defined but never used                                                    no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\Inventory.jsx
+   20:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+   31:18  error  'error' is defined but never used                                                         no-unused-vars
+   40:18  error  'error' is defined but never used                                                         no-unused-vars
+  105:18  error  'error' is defined but never used                                                         no-unused-vars
+  118:18  error  'error' is defined but never used                                                         no-unused-vars
+  137:18  error  'error' is defined but never used                                                         no-unused-vars
+  160:18  error  'error' is defined but never used                                                         no-unused-vars
+  344:53  error  'idx' is defined but never used                                                           no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\LiveStream.jsx
+    2:10  error    'useNavigate' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                no-unused-vars
+   13:21  error    'setViewers' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                        no-unused-vars
+   43:22  error    'err' is defined but never used                                                                                                   no-unused-vars
+   54:22  error    'err' is defined but never used                                                                                                   no-unused-vars
+   79:8   warning  React Hook useEffect has missing dependencies: 'branchId' and 'mockProducts'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  107:26  error    'geoErr' is defined but never used                                                                                                no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\Login.jsx
+  22:18  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\POS.jsx
+  161:13  error  'user' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  182:18  error  'error' is defined but never used                                                     no-unused-vars
+  191:18  error  'error' is defined but never used                                                     no-unused-vars
+  200:18  error  'error' is defined but never used                                                     no-unused-vars
+  209:18  error  'error' is defined but never used                                                     no-unused-vars
+  220:18  error  'error' is defined but never used                                                     no-unused-vars
+  233:18  error  'error' is defined but never used                                                     no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\PublicOrderPage.jsx
+  27:8   warning  React Hook useEffect has a missing dependency: 'fetchMenu'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  33:18  error    'error' is defined but never used                                                                             no-unused-vars
+  62:11  error    'removeFromCart' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                no-unused-vars
+  97:18  error    'error' is defined but never used                                                                             no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\PurchaseOrders.jsx
+  10:12  error    'loading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             no-unused-vars
+  10:21  error    'setLoading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          no-unused-vars
+  16:9   error    Error: Cannot access variable before it is declared
+
+`fetchOrders` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  14 |
+  15 |     useEffect(() => {
+> 16 |         fetchOrders();
+     |         ^^^^^^^^^^^ `fetchOrders` accessed before it is declared
+  17 |     }, [supplierId]);
+  18 |
+  19 |     const fetchOrders = async () => {
+
+  17 |     }, [supplierId]);
+  18 |
+> 19 |     const fetchOrders = async () => {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 20 |         try {
+     | ^^^^^^^^^^^^^
+> 21 |             const response = await api.get('/purchase-orders/', {
+     | ^^^^^^^^^^^^^
+> 22 |                 params: { supplier_id: supplierId }
+     | ^^^^^^^^^^^^^
+> 23 |             });
+     | ^^^^^^^^^^^^^
+> 24 |             setOrders(response.data);
+     | ^^^^^^^^^^^^^
+> 25 |         } catch (error) {
+     | ^^^^^^^^^^^^^
+> 26 |             toast.error('Failed to load stock orders');
+     | ^^^^^^^^^^^^^
+> 27 |         }
+     | ^^^^^^^^^^^^^
+> 28 |     };
+     | ^^^^^^^ `fetchOrders` is declared here
+  29 |
+  30 |     const handleReceive = async (id) => {
+  31 |         try {  react-hooks/immutability
+  17:8   warning  React Hook useEffect has a missing dependency: 'fetchOrders'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      react-hooks/exhaustive-deps
+  25:18  error    'error' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   no-unused-vars
+  35:18  error    'error' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\RawMaterials.jsx
+  25:18  error  'error' is defined but never used  no-unused-vars
+  34:18  error  'error' is defined but never used  no-unused-vars
+  53:18  error  'error' is defined but never used  no-unused-vars
+  66:18  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\Reports.jsx
+   27:8   warning  React Hook useEffect has missing dependencies: 'navigate' and 'user?.role'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+   38:18  error    'error' is defined but never used                                                                                               no-unused-vars
+  170:60  error    'idx' is defined but never used                                                                                                 no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\SecurityDashboard.jsx
+   31:8   warning  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   43:18  error    'error' is defined but never used                                                                             no-unused-vars
+   55:18  error    'error' is defined but never used                                                                             no-unused-vars
+  160:49  error    'index' is defined but never used                                                                             no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\SocialDashboard.jsx
+  26:22  error  'err' is defined but never used  no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\StaffManagement.jsx
+  23:18  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\StockTransfers.jsx
+  50:18  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\Suppliers.jsx
+  16:13  error  'user' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  27:18  error  'error' is defined but never used                                                     no-unused-vars
+  47:18  error  'error' is defined but never used                                                     no-unused-vars
+  66:18  error  'error' is defined but never used                                                     no-unused-vars
+
+C:\Users\dishy\OneDrive\Desktop\coffeshop_pos\frontend\src\pages\TableManagement.jsx
+  24:18  error  'error' is defined but never used  no-unused-vars
+  42:18  error  'error' is defined but never used  no-unused-vars
+  55:18  error  'error' is defined but never used  no-unused-vars
+
+Γ£û 74 problems (67 errors, 7 warnings)
+
