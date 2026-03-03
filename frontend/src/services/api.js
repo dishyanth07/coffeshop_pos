@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const api = axios.create();
+const api = axios.create({
+  baseURL: "https://coffeshop-pos-backend.onrender.com"
+});
 
 // Add a request interceptor to include the auth token and fix URL routing
 api.interceptors.request.use(
