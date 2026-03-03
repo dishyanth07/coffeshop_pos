@@ -36,7 +36,11 @@ const Login = () => {
             }
         } catch (error) {
             console.error("Login Error:", error);
-            alert("Login failed");
+            const errorMessage = error.response?.data?.detail
+                || error.response?.data?.message
+                || error.message
+                || "Login failed";
+            alert(`Login failed: ${errorMessage}`);
         } finally {
             setLoading(false);
         }
