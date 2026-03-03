@@ -4,6 +4,7 @@ __pycache__/
 *.log
 *.db
 .env
+!.env.production
 
 # Node
 node_modules/
