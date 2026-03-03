@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { Coffee, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
 import Logo from '../components/Logo';
 import { toast } from 'react-hot-toast';
+import api from '../services/api';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -13,26 +14,29 @@ const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const handlePasswordSubmit = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await login(username, password);
-            toast.success('Welcome back!');
-            window.location.href = '/pos';
-        } catch (error) {
-            console.error("LOGIN ERROR FULL OBJECT:", error);
-            let detail = "Invalid credentials or Server Error";
-            if (error.response) {
-                detail = `Error ${error.response.status}: ${JSON.stringify(error.response.data)}`;
-                console.error("RESPONSE DATA:", error.response.data);
-                console.error("RESPONSE STATUS:", error.response.status);
-            } else if (error.request) {
-                detail = "Network Error: No response from server. Check if port 8000 is open in firewall.";
+            const params = new URLSearchParams();
+            params.append('username', username);
+            params.append('password', password);
+
+            const response = await api.post('/auth/token', params, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            if (response.data && response.data.access_token) {
+                localStorage.setItem('token', response.data.access_token);
+                window.location.href = '/';
             } else {
-                detail = error.message;
+                throw new Error("Invalid response from server");
             }
-            toast.error(detail, { duration: 5000 });
+        } catch (error) {
+            console.error("Login Error:", error);
+            alert("Login failed");
         } finally {
             setLoading(false);
         }
@@ -62,7 +66,7 @@ const Login = () => {
 
                     {/* Form Container */}
                     <div className="p-8">
-                        <form onSubmit={handlePasswordSubmit} className="space-y-6">
+                        <form onSubmit={handleLogin} className="space-y-6">
                             <div className="space-y-5">
                                 <div className="space-y-2 group">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 transition-colors group-focus-within:text-brand-primary">
