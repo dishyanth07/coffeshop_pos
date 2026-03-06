@@ -7,15 +7,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Create database tables
-try:
-    Base.metadata.create_all(bind=engine)
-    print("Successfully connected to the PostgreSQL database and tables created.")
-except Exception as e:
-    print(f"Failed to connect to the PostgreSQL database: {e}")
-    logger.error(f"Database connection error: {e}")
-
 app = FastAPI(title="Power House - Smart POS")
+
+@app.on_event("startup")
+def startup():
+    # Create database tables
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("Successfully connected to the PostgreSQL database and tables created.")
+    except Exception as e:
+        print(f"Failed to connect to the PostgreSQL database: {e}")
+        logger.error(f"Database connection error: {e}")
 
 # CORS configuration
 app.add_middleware(

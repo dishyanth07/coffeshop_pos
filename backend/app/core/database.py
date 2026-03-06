@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = "postgresql://powerhouse_user:49uFCho9oQnumlq1NcjmkwkpV4siAUpK@dpg-d6lf38paae7s738724m0-a.oregon-postgres.render.com/powerhouse_7sve"
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
 print(f"DEBUG: Connecting to database URL: {SQLALCHEMY_DATABASE_URL}")
 
