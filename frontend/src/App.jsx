@@ -13,6 +13,7 @@ import PurchaseOrders from './pages/PurchaseOrders';
 import BranchManagement from './pages/BranchManagement';
 import StockTransfers from './pages/StockTransfers';
 import CentralDashboard from './pages/CentralDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 import TableManagement from './pages/TableManagement';
 import PublicOrderPage from './pages/PublicOrderPage';
 import SecurityDashboard from './pages/SecurityDashboard';
@@ -132,6 +133,14 @@ const AppContent = () => {
                         <ProtectedRoute>
                             <CentralDashboard />
                         </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin"
+                    element={
+                        localStorage.getItem("userRole") === "admin" || localStorage.getItem("userRole") === "owner"
+                            ? <AdminDashboard />
+                            : <Navigate to="/login" />
                     }
                 />
                 <Route
