@@ -11,7 +11,7 @@ router = APIRouter()
 @router.get("/staff", response_model=List[UserResponse])
 async def get_staff(
     db: Session = Depends(database.get_db),
-    current_user: User = Depends(deps.get_current_manager)
+    current_user: User = Depends(deps.get_current_admin_user)
 ):
     """Get all staff members for the current branch. Owner/Admin see all."""
     query = db.query(User)
@@ -26,7 +26,7 @@ async def get_staff(
 async def create_staff(
     user_in: UserCreate,
     db: Session = Depends(database.get_db),
-    current_user: User = Depends(deps.get_current_manager)
+    current_user: User = Depends(deps.get_current_admin_user)
 ):
     """
     Managers can create Cashiers for their own branch.
@@ -67,7 +67,7 @@ async def create_staff(
 async def delete_staff(
     user_id: int,
     db: Session = Depends(database.get_db),
-    current_user: User = Depends(deps.get_current_manager)
+    current_user: User = Depends(deps.get_current_admin_user)
 ):
     """
     Managers can delete Cashiers for their own branch.

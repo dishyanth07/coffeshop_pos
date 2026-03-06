@@ -11,7 +11,7 @@ router = APIRouter()
 @router.get("/central-overview")
 async def get_central_overview(
     db: Session = Depends(database.get_db),
-    current_user: User = Depends(deps.get_current_admin_user)
+    current_user: User = Depends(deps.get_current_manager)
 ):
     """
     Owner only: Get aggregated multi-branch performance stats.

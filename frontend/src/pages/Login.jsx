@@ -30,7 +30,20 @@ const Login = () => {
 
             if (response.data && response.data.access_token) {
                 localStorage.setItem('token', response.data.access_token);
-                window.location.href = '/';
+
+                // Redirect based on role
+                const userRole = response.data.role || "cashier";
+                localStorage.setItem("userRole", userRole);
+
+                if (userRole === "admin" || userRole === "owner") {
+                    window.location.href = "/admin";
+                } else if (userRole === "branch_manager") {
+                    window.location.href = "/manager";
+                } else if (userRole === "cashier") {
+                    window.location.href = "/pos";
+                } else {
+                    window.location.href = "/pos";
+                }
             } else {
                 throw new Error("Invalid response from server");
             }

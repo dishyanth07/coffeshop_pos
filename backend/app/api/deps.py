@@ -45,7 +45,7 @@ async def get_current_owner(current_user: User = Depends(get_current_active_user
     return current_user
 
 async def get_current_manager(current_user: User = Depends(get_current_active_user)):
-    if current_user.role not in [UserRole.OWNER, UserRole.ADMIN, UserRole.BRANCH_MANAGER]:
+    if current_user.role not in [UserRole.OWNER, UserRole.ADMIN, UserRole.MANAGER]:
         raise HTTPException(status_code=403, detail="Management access required")
     return current_user
 

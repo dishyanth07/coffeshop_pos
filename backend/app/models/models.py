@@ -7,7 +7,7 @@ from app.core.database import Base
 class UserRole(str, enum.Enum):
     OWNER = "owner"
     ADMIN = "admin"
-    BRANCH_MANAGER = "branch_manager"
+    MANAGER = "manager"
     CASHIER = "cashier"
 
 class PurchaseOrderStatus(str, enum.Enum):

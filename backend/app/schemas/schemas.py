@@ -71,6 +71,7 @@ class CustomerResponse(CustomerBase):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    role: str = "cashier"
 
 class TokenData(BaseModel):
     username: Optional[str] = None

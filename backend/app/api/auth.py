@@ -44,7 +44,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
         },
         expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "role": user.role.value}
 
 @router.post("/register", response_model=Token)
 async def register(user: UserCreate, db: Session = Depends(database.get_db)):
@@ -75,7 +75,8 @@ async def register(user: UserCreate, db: Session = Depends(database.get_db)):
         },
         expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "role": new_user.role.value}
+
 @router.post("/change-password")
 async def change_password(
     data: UserPasswordChange,
