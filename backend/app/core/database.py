@@ -6,16 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+SQLALCHEMY_DATABASE_URL = "postgresql://powerhouse_user:49uFCho9oQnumlq1NcjmkwkpV4siAUpK@dpg-d6lf38paae7s738724m0-a.oregon-postgres.render.com/powerhouse_7sve"
 
 print(f"DEBUG: Connecting to database URL: {SQLALCHEMY_DATABASE_URL}")
 
-if "sqlite" in SQLALCHEMY_DATABASE_URL:
-    engine = create_engine(
-        SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-    )
-else:
-    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()

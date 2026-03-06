@@ -3,9 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api import auth, products, inventory, sales, suppliers, raw_materials, purchase_orders, branches, transfers, reports, tables, customer_orders, fraud, assistant, recovery, users, live_commerce
 from app.core.database import engine, Base
 from app.models import models # Import models to ensure they are registered
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Create database tables
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    print("Successfully connected to the PostgreSQL database and tables created.")
+except Exception as e:
+    print(f"Failed to connect to the PostgreSQL database: {e}")
+    logger.error(f"Database connection error: {e}")
 
 app = FastAPI(title="Power House - Smart POS")
 
